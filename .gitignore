@@ -1,0 +1,7 @@
+# Simulation files
+*.vvp
+*.vcd
+sim/
+
+# Temporary files
+*.tmp

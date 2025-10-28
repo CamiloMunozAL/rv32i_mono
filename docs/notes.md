@@ -29,6 +29,6 @@ Se implementó la Unidad Aritmético-Lógica como módulo combinacional con entr
 
 **Resultado del testbench:**
 
-![Resultado ALU Testbench](../snapshots/alu_tb.png)
+![Resultado ALU Testbench](./img/alu_tb.png)
 
 ---

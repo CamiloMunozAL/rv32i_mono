@@ -32,3 +32,32 @@ Se implementó la Unidad Aritmético-Lógica como módulo combinacional con entr
 ![Resultado ALU Testbench](../img/alu_tb.png)
 
 ---
+
+### 2️⃣ Program Counter (PC)
+
+Se implementó el Program Counter como módulo secuencial que almacena la dirección de la instrucción actual. Utiliza un flip-flop de 32 bits con señal de reloj (`clk`) y reset asíncrono (`reset`). La entrada `next_pc` permite actualizar la dirección en cada ciclo de reloj. Al activar reset, el PC se reinicia a 0x00000000. Se desarrolló un testbench (`pc_tb.sv`) que verifica la actualización secuencial del PC, la funcionalidad de reset y la carga de diferentes direcciones. Todas las pruebas fueron exitosas.
+
+**Resultado del testbench:**
+
+![Resultado PC Testbench](../img/pc_tb.png)
+
+---
+
+### 3️⃣ Sumador (Sum)
+
+Se implementó un módulo combinacional que incrementa en 4 la dirección del Program Counter (PC). Este módulo es esencial para avanzar a la siguiente instrucción en el flujo de ejecución del procesador.
+
+El diseño utiliza una operación combinacional simple para sumar 4 a la entrada `pc_in` y producir la salida `pc_out`.
+
+#### 🧪 Testbench del Sumador
+
+Se desarrolló un testbench (`sum_tb.sv`) que verifica:
+
+- ✅ Incremento correcto de la dirección del PC en 4.
+- ✅ Manejo de valores límite, como `0xFFFFFFFC`.
+
+**Resultado del testbench:**
+
+![Resultado Sumador Testbench](../img/sum_tb.png)
+
+---

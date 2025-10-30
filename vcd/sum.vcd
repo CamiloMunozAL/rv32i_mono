@@ -1,0 +1,44 @@
+$date
+	Thu Oct 30 17:08:08 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module sum_tb $end
+$var wire 32 ! pc_out [31:0] $end
+$var reg 32 " pc_in [31:0] $end
+$scope module uut $end
+$var wire 32 # pc_in [31:0] $end
+$var reg 32 $ pc_out [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b100 $
+b0 #
+b0 "
+b100 !
+$end
+#10000
+b1000 !
+b1000 $
+b100 "
+b100 #
+#20000
+b10000 !
+b10000 $
+b1100 "
+b1100 #
+#30000
+b0 !
+b0 $
+b11111111111111111111111111111100 "
+b11111111111111111111111111111100 #
+#50000

@@ -11,7 +11,7 @@ module sum_tb;
     .pc_out(pc_out)
   );
   initial begin
-    $dumpfile("sum.vcd");
+     $dumpfile("vcd/sum.vcd");
     $dumpvars(0, sum_tb);
     $display("=== INICIO DE SIMULACIÓN ===");
 

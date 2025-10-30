@@ -11,7 +11,7 @@ module alu_tb;
   );
 
   initial begin
-    $dumpfile("alu.vcd");  // Archivo de salida para la forma de onda
+    $dumpfile("vcd/alu_tb.vcd");  // Archivo de salida para la forma de onda
     $dumpvars(0, alu_tb);  // Guarda todas las señales
 
     $display("=== INICIO DE SIMULACIÓN ===");

@@ -22,7 +22,7 @@ module pc_tb;
 
   initial begin
     // Inicialización
-    $dumpfile("pc.vcd");
+    $dumpfile("vcd/pc.vcd");
     $dumpvars(0, pc_tb);
     $display("=== INICIO DE SIMULACIÓN ===");
 

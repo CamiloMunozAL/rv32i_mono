@@ -75,3 +75,39 @@ El testbench se elaboró para verificar el funcionamiento de la Unidad de Contro
 ![Resultado Control Unit Testbench](../img/cu_tb.png)
 
 ---
+
+### 5️⃣ Unidad de Registros (Register Unit)
+
+El banco de registros (RU) implementa los 32 registros de propósito general de la arquitectura RISC-V, cada uno de 32 bits. Su función principal es almacenar los operandos y resultados de las instrucciones. El registro x0 está protegido y siempre contiene el valor 0, mientras que el registro x2 (stack pointer) se inicializa en el valor más alto de memoria para facilitar la gestión de la pila.
+
+**Funcionamiento:**
+
+- **Lectura asíncrona:** Los valores de los registros fuente (`rs1` y `rs2`) pueden consultarse en cualquier momento, sin depender del reloj. Esto permite que el procesador lea los operandos de manera inmediata.
+- **Escritura sincronizada:** La escritura en el registro destino (`rd`) ocurre únicamente en el flanco de subida del reloj (`posedge clk`) y si la señal de control `RUWr` está activa. Es fundamental que los datos (`DataWr`) y el número de registro destino (`rd`) estén listos antes del flanco de reloj para que la escritura sea exitosa.
+- **Protección de x0:** Si se intenta escribir en el registro x0, el módulo lo ignora y x0 permanece en cero, cumpliendo la especificación RISC-V.
+
+#### 🧪 Testbench
+
+El testbench (`ru_tb.sv`) verifica el funcionamiento del banco de registros mediante pruebas exhaustivas y representativas:
+
+- **Prueba 1:** Lectura asíncrona de x0 y x2 (stack pointer), comprobando los valores iniciales.
+- **Prueba 2:** Escritura sincronizada en x5, verificando que el valor se almacena correctamente tras el flanco de reloj.
+- **Prueba 3:** Protección de x0, intentando escribir en x0 y comprobando que permanece en cero.
+- **Prueba 4:** Escrituras múltiples en registros distintos (x10 y x15) en ciclos consecutivos, validando que cada escritura ocurre en el flanco de reloj y que la lectura simultánea es correcta.
+- **Prueba 5:** Sobrescritura de un registro (x5), asegurando que el nuevo valor reemplaza al anterior.
+- **Prueba 6:** Lectura asíncrona de múltiples registros, mostrando que los valores escritos persisten y pueden leerse en cualquier momento.
+
+Cada prueba utiliza `$display` para mostrar los resultados en consola y genera un archivo VCD para análisis de ondas en WaveTrace. Se comprobó que la escritura solo ocurre en el flanco de subida del reloj y que los datos deben estar estables antes de ese instante para garantizar el funcionamiento correcto. La protección del registro x0 y la inicialización del stack pointer también fueron validadas.
+
+#### ⚠️ Dificultad: sincronización con posedge en la Register Unit
+
+Durante la verificación del banco de registros, se presentó una dificultad en la **Prueba 4** del testbench: al realizar escrituras consecutivas en diferentes registros, los valores no se almacenaban correctamente. El problema era que los datos y el número de registro destino (`rd`) deben estar estables **antes** del flanco de subida del reloj (`posedge clk`), ya que la escritura es sincronizada. Si se actualizan las señales justo en el flanco, la escritura puede fallar o no reflejar el valor esperado.
+
+**Solución:**
+Se ajustó el testbench para asegurar que, antes de cada `@(posedge clk)`, los valores de `rd`, `DataWr` y `RUWr` estuvieran correctamente asignados y estables. Se agregaron los posedge necesarios entre cada escritura, permitiendo que el módulo registre los datos en el ciclo de reloj adecuado. Así, las escrituras múltiples y la lectura simultánea funcionaron correctamente, validando el comportamiento esperado del banco de registros.
+
+**Resultado del testbench:**
+
+![Resultado RU Testbench](../img/ru_tb.png)
+
+---

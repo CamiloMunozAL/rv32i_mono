@@ -111,3 +111,32 @@ Se ajustó el testbench para asegurar que, antes de cada `@(posedge clk)`, los v
 ![Resultado RU Testbench](../img/ru_tb.png)
 
 ---
+
+### 6️⃣ Immediate Generator (immgen)
+
+El módulo `immgen` se encarga de extraer y extender el campo inmediato de las instrucciones RISC-V, adaptándose a los diferentes formatos (I, S, B, U, J). Recibe la instrucción completa y una señal de control (`immsrc`) que indica el tipo de inmediato a generar. Para cada formato, se seleccionan y reordenan los bits correspondientes, aplicando extensión de signo cuando es necesario.
+
+**Funcionamiento:**
+- Para instrucciones tipo I, S, B, U y J, el módulo genera el inmediato extendido a 32 bits según la codificación RISC-V.
+- Utiliza asignaciones continuas (`wire`) para cada tipo de inmediato y un bloque `always_comb` para seleccionar el valor final según `immsrc`.
+
+#### 🧪 Testbench
+
+El testbench (`immgen_tb.sv`) verifica el funcionamiento del generador de inmediatos con instrucciones representativas de cada formato:
+- I-Type: addi x5, x0, 3
+- S-Type: sw x5, 20(x2)
+- B-Type: beq x2, x6, -16
+- U-Type: lui x10, 0x12345
+- J-Type: jal x1, 0x1F4
+
+Para cada caso, se asigna la instrucción codificada y el tipo de inmediato, comprobando que el valor generado coincide con el esperado. Se utiliza `$display` para mostrar los resultados y se genera un archivo VCD para análisis de ondas.
+
+#### ⚠️ Dificultad: extracción de inmediato en S-Type
+
+Durante la verificación, se detectó que la prueba S-Type no generaba el valor esperado. El problema se debía a la codificación incorrecta del inmediato en la instrucción de prueba, lo que provocaba que los bits extraídos no correspondieran a 20. La solución fue ajustar la instrucción en el testbench para que los bits [31:25] y [11:7] representaran correctamente el valor 20, permitiendo que el módulo extrajera el inmediato correcto.
+
+**Resultado del testbench:**
+
+![Resultado ImmGen Testbench](../img/immgen_tb.png)
+
+---

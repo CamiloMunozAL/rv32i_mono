@@ -199,3 +199,29 @@ Para cada caso, se asignan valores representativos a los registros y la señal d
 ![Resultado BRU Testbench](../img/bru_tb.png)
 
 ---
+
+### 9️⃣ Multiplexor para la Siguiente Instrucción (muxnextpc)
+
+El módulo `muxnextpc` es el encargado de seleccionar la dirección de la siguiente instrucción que debe cargar el Program Counter (PC). Recibe dos posibles direcciones:
+- El valor de `PC + 4`, que corresponde a la ejecución secuencial normal.
+- El resultado de la ALU, que puede ser una dirección de salto calculada (por ejemplo, en instrucciones de branch o jump).
+
+La selección entre estas dos opciones se realiza mediante la señal de control `NextPCSrc`, generada por la Branch Unit (`bru`). Si `NextPCSrc` es 0, el PC avanza de forma secuencial; si es 1, se toma la dirección calculada por la ALU.
+
+**Funcionamiento:**
+- Implementado como un multiplexor 2 a 1, usando un bloque `always_comb` y la señal de selección.
+- Permite que el procesador ejecute saltos y cambios de flujo de manera eficiente y controlada.
+
+#### 🧪 Testbench
+
+El testbench (`muxnextpc_tb.sv`) verifica ambos casos de selección:
+- Cuando `NextPCSrc` es 0, la salida corresponde a `PC + 4`.
+- Cuando `NextPCSrc` es 1, la salida corresponde al resultado de la ALU.
+
+En cada prueba se asignan valores distintos a las entradas y se comprueba que la salida del multiplexor corresponde al valor esperado. Se utiliza `$display` para mostrar el resultado y se genera un archivo VCD para análisis de ondas.
+
+**Resultado del testbench:**
+
+![Resultado muxnextpc Testbench](../img/muxnextpc_tb.png)
+
+---

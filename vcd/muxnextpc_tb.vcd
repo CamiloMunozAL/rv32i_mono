@@ -1,0 +1,44 @@
+$date
+	Tue Nov 04 07:02:29 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module muxnextpc_tb $end
+$var wire 32 ! next_pc [31:0] $end
+$var reg 32 " alu_result [31:0] $end
+$var reg 1 # nextPCSrc $end
+$var reg 32 $ pc_plus4 [31:0] $end
+$scope module uut $end
+$var wire 32 % alu_result [31:0] $end
+$var wire 1 # nextPCSrc $end
+$var wire 32 & pc_plus4 [31:0] $end
+$var reg 32 ' next_pc [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b100 '
+b100 &
+b10000 %
+b100 $
+0#
+b10000 "
+b100 !
+$end
+#10
+b100000 !
+b100000 '
+1#
+b100000 "
+b100000 %
+b1000 $
+b1000 &
+#20

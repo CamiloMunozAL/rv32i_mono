@@ -67,8 +67,8 @@ Se desarrolló un testbench (`sum_tb.sv`) que verifica:
 La Unidad de Control fue diseñada como un módulo combinacional encargado de decodificar las instrucciones RISC-V y generar todas las señales de control necesarias para el procesador monociclo. Se analizaron los diferentes formatos de instrucción (R, I, S, B, U, J) y se implementó una lógica basada en un bloque `case` sobre el campo `opcode`, complementada con los campos `funct3` y `funct7` para distinguir operaciones específicas. Para cada tipo de instrucción, se asignan valores concretos a las señales de control: escritura en registros (`RUWr`), selección de inmediato (`ImmSrc`), fuentes de la ALU (`AluAsrc`, `AluBsrc`), operación de salto (`BrOp`), operación de la ALU (`AluOp`), control de memoria de datos (`DmWr`, `DmCtrl`) y fuente de datos para escritura en registros (`RUDataWrSrc`). El diseño se apoyó en tablas de verdad y documentación oficial del set de instrucciones RV32I, asegurando que cada instrucción activa únicamente las señales requeridas para su ejecución.
 
 #### 🧪 Testbench
-El testbench se elaboró para verificar el funcionamiento de la Unidad de Control bajo diferentes escenarios representativos. Se instanció el módulo y se inicializaron las señales de entrada (`opcode`, `funct3`, `funct7`). Para cada tipo de instrucción relevante, se asignaron los valores correspondientes y se dejó un retardo para observar la respuesta. Se utilizaron `$display` para mostrar en consola los valores de las señales de salida más importantes, facilitando la depuración y el análisis directo. Además, se generó un archivo VCD con `$dumpfile` y `$dumpvars` para visualizar las ondas en WaveTrace. El testbench cubre instrucciones R-Type (ADD, SUB), I-Type (ADDI, SLTI), Load (LW), Store (SW), Branch (BEQ), Jump (JAL) y un caso inválido, permitiendo comprobar la correcta decodificación y activación de señales en cada caso.
 
+El testbench se elaboró para verificar el funcionamiento de la Unidad de Control bajo diferentes escenarios representativos. Se instanció el módulo y se inicializaron las señales de entrada (`opcode`, `funct3`, `funct7`). Para cada tipo de instrucción relevante, se asignaron los valores correspondientes y se dejó un retardo para observar la respuesta. Se utilizaron `$display` para mostrar en consola los valores de las señales de salida más importantes, facilitando la depuración y el análisis directo. Además, se generó un archivo VCD con `$dumpfile` y `$dumpvars` para visualizar las ondas en WaveTrace. El testbench cubre instrucciones R-Type (ADD, SUB), I-Type (ADDI, SLTI), Load (LW), Store (SW), Branch (BEQ), Jump (JAL) y un caso inválido, permitiendo comprobar la correcta decodificación y activación de señales en cada caso.
 
 **Resultado del testbench:**
 
@@ -117,12 +117,14 @@ Se ajustó el testbench para asegurar que, antes de cada `@(posedge clk)`, los v
 El módulo `immgen` se encarga de extraer y extender el campo inmediato de las instrucciones RISC-V, adaptándose a los diferentes formatos (I, S, B, U, J). Recibe la instrucción completa y una señal de control (`immsrc`) que indica el tipo de inmediato a generar. Para cada formato, se seleccionan y reordenan los bits correspondientes, aplicando extensión de signo cuando es necesario.
 
 **Funcionamiento:**
+
 - Para instrucciones tipo I, S, B, U y J, el módulo genera el inmediato extendido a 32 bits según la codificación RISC-V.
 - Utiliza asignaciones continuas (`wire`) para cada tipo de inmediato y un bloque `always_comb` para seleccionar el valor final según `immsrc`.
 
 #### 🧪 Testbench
 
 El testbench (`immgen_tb.sv`) verifica el funcionamiento del generador de inmediatos con instrucciones representativas de cada formato:
+
 - I-Type: addi x5, x0, 3
 - S-Type: sw x5, 20(x2)
 - B-Type: beq x2, x6, -16
@@ -153,6 +155,7 @@ Ambos módulos se diseñaron como multiplexores simples de 2 a 1, utilizando blo
 #### 🧪 Testbench
 
 Se desarrollaron testbenches independientes para cada multiplexor (`muxaluA_tb.sv` y `muxaluB_tb.sv`), verificando los dos casos posibles de selección:
+
 - Cuando la señal de control es 0, se selecciona el valor del registro correspondiente.
 - Cuando la señal de control es 1, se selecciona el valor alternativo (PC o inmediato).
 
@@ -162,5 +165,37 @@ En cada prueba se asignan valores distintos a las entradas y se comprueba que la
 
 ![Resultado muxaluA Testbench](../img/muxaluA_tb.png)
 ![Resultado muxaluB Testbench](../img/muxaluB_tb.png)
+
+---
+
+### 8️⃣ Branch Unit (BRU)
+
+La Branch Unit (`bru`) es responsable de evaluar las condiciones de salto en las instrucciones de control de flujo (branch) del procesador RISC-V. Recibe como entradas los valores de los registros fuente (`ru_rs1` y `ru_rs2`) y una señal de control (`brOp`) que indica el tipo de comparación a realizar (igualdad, desigualdad, menor, mayor o igual, versiones signed y unsigned).
+
+Según el valor de `brOp`, la unidad compara los operandos y genera la señal `NextPCSrc`, que indica si el salto debe realizarse o no. Esto permite que el Program Counter seleccione la siguiente dirección de instrucción correctamente, según el resultado de la comparación.
+
+**Funcionamiento:**
+
+- Soporta todos los tipos de branch definidos en RISC-V: BEQ, BNE, BLT, BGE, BLTU, BGEU.
+- Utiliza un bloque `always_comb` y un `case` para seleccionar la operación de comparación adecuada.
+- La salida `NextPCSrc` se activa (1) si la condición de salto se cumple, y permanece en 0 en caso contrario.
+
+#### 🧪 Testbench
+
+El testbench (`bru_tb.sv`) verifica el funcionamiento de la Branch Unit con pruebas para cada tipo de comparación:
+
+- BEQ: Igualdad
+- BNE: Desigualdad
+- BLT: Menor que (signed)
+- BGE: Mayor o igual que (signed)
+- BLTU: Menor que (unsigned)
+- BGEU: Mayor o igual que (unsigned)
+- No branch: Sin salto
+
+Para cada caso, se asignan valores representativos a los registros y la señal de control, comprobando que la salida `NextPCSrc` corresponde al resultado esperado. Se utiliza `$display` para mostrar los resultados y se genera un archivo VCD para análisis de ondas.
+
+**Resultado del testbench:**
+
+![Resultado BRU Testbench](../img/bru_tb.png)
 
 ---

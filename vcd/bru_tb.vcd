@@ -1,0 +1,77 @@
+$date
+	Mon Nov 03 20:33:45 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module bru_tb $end
+$var wire 1 ! NextPCSrc $end
+$var reg 5 " brOp [4:0] $end
+$var reg 32 # ru_rs1 [31:0] $end
+$var reg 32 $ ru_rs2 [31:0] $end
+$scope module uut $end
+$var wire 5 % brOp [4:0] $end
+$var wire 32 & ru_rs1 [31:0] $end
+$var wire 32 ' ru_rs2 [31:0] $end
+$var reg 1 ! NextPCSrc $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b10100 '
+b1010 &
+b1000 %
+b10100 $
+b1010 #
+b1000 "
+0!
+$end
+#10
+1!
+b1010 $
+b1010 '
+#20
+b1001 "
+b1001 %
+b10100 $
+b10100 '
+b1111 #
+b1111 &
+#30
+b1100 "
+b1100 %
+b1010 $
+b1010 '
+b11111111111111111111111111111011 #
+b11111111111111111111111111111011 &
+#40
+b1101 "
+b1101 %
+b1010 #
+b1010 &
+#50
+b1110 "
+b1110 %
+b101 #
+b101 &
+#60
+b1111 "
+b1111 %
+b10100 #
+b10100 &
+#70
+0!
+b0 "
+b0 %
+b0 $
+b0 '
+b0 #
+b0 &
+#100

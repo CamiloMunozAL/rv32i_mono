@@ -1,0 +1,44 @@
+$date
+	Mon Nov 03 19:53:38 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module muxaluB_tb $end
+$var wire 32 ! aluB [31:0] $end
+$var reg 1 " aluBSrc $end
+$var reg 32 # immgen [31:0] $end
+$var reg 32 $ ru_rs2 [31:0] $end
+$scope module dut $end
+$var wire 1 " aluBSrc $end
+$var wire 32 % immgen [31:0] $end
+$var wire 32 & ru_rs2 [31:0] $end
+$var reg 32 ' aluB [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b10 '
+b10 &
+b1 %
+b10 $
+b1 #
+0"
+b10 !
+$end
+#10
+b11 !
+b11 '
+1"
+b100 $
+b100 &
+b11 #
+b11 %
+#20

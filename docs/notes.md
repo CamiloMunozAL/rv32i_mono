@@ -67,8 +67,8 @@ Se desarrolló un testbench (`sum_tb.sv`) que verifica:
 La Unidad de Control fue diseñada como un módulo combinacional encargado de decodificar las instrucciones RISC-V y generar todas las señales de control necesarias para el procesador monociclo. Se analizaron los diferentes formatos de instrucción (R, I, S, B, U, J) y se implementó una lógica basada en un bloque `case` sobre el campo `opcode`, complementada con los campos `funct3` y `funct7` para distinguir operaciones específicas. Para cada tipo de instrucción, se asignan valores concretos a las señales de control: escritura en registros (`RUWr`), selección de inmediato (`ImmSrc`), fuentes de la ALU (`AluAsrc`, `AluBsrc`), operación de salto (`BrOp`), operación de la ALU (`AluOp`), control de memoria de datos (`DmWr`, `DmCtrl`) y fuente de datos para escritura en registros (`RUDataWrSrc`). El diseño se apoyó en tablas de verdad y documentación oficial del set de instrucciones RV32I, asegurando que cada instrucción activa únicamente las señales requeridas para su ejecución.
 
 #### 🧪 Testbench
-
 El testbench se elaboró para verificar el funcionamiento de la Unidad de Control bajo diferentes escenarios representativos. Se instanció el módulo y se inicializaron las señales de entrada (`opcode`, `funct3`, `funct7`). Para cada tipo de instrucción relevante, se asignaron los valores correspondientes y se dejó un retardo para observar la respuesta. Se utilizaron `$display` para mostrar en consola los valores de las señales de salida más importantes, facilitando la depuración y el análisis directo. Además, se generó un archivo VCD con `$dumpfile` y `$dumpvars` para visualizar las ondas en WaveTrace. El testbench cubre instrucciones R-Type (ADD, SUB), I-Type (ADDI, SLTI), Load (LW), Store (SW), Branch (BEQ), Jump (JAL) y un caso inválido, permitiendo comprobar la correcta decodificación y activación de señales en cada caso.
+
 
 **Resultado del testbench:**
 
@@ -138,5 +138,29 @@ Durante la verificación, se detectó que la prueba S-Type no generaba el valor 
 **Resultado del testbench:**
 
 ![Resultado ImmGen Testbench](../img/immgen_tb.png)
+
+---
+
+### 7️⃣ Multiplexores para la ALU (muxaluA y muxaluB)
+
+Para dotar de flexibilidad a la ALU y permitir la ejecución de diferentes tipos de instrucciones, se implementaron dos módulos multiplexores:
+
+- **muxaluA:** Selecciona la primera entrada de la ALU entre el valor del Program Counter (`pc`) y el registro fuente 1 (`RU[rs1]`). El control se realiza mediante la señal `aluASrc` proveniente de la Unidad de Control.
+- **muxaluB:** Selecciona la segunda entrada de la ALU entre el valor generado por el módulo de inmediatos (`immgen`) y el registro fuente 2 (`RU[rs2]`). El control se realiza mediante la señal `aluBSrc` de la Unidad de Control.
+
+Ambos módulos se diseñaron como multiplexores simples de 2 a 1, utilizando bloques `always_comb` y una señal de selección. Esto permite que la ALU reciba los operandos adecuados según el tipo de instrucción (por ejemplo, operaciones aritméticas entre registros, operaciones con inmediatos, cálculos de direcciones, etc.).
+
+#### 🧪 Testbench
+
+Se desarrollaron testbenches independientes para cada multiplexor (`muxaluA_tb.sv` y `muxaluB_tb.sv`), verificando los dos casos posibles de selección:
+- Cuando la señal de control es 0, se selecciona el valor del registro correspondiente.
+- Cuando la señal de control es 1, se selecciona el valor alternativo (PC o inmediato).
+
+En cada prueba se asignan valores distintos a las entradas y se comprueba que la salida del multiplexor corresponde al valor esperado. Se utiliza `$display` para mostrar el resultado y se genera un archivo VCD para análisis de ondas.
+
+**Resultado de los testbenches:**
+
+![Resultado muxaluA Testbench](../img/muxaluA_tb.png)
+![Resultado muxaluB Testbench](../img/muxaluB_tb.png)
 
 ---

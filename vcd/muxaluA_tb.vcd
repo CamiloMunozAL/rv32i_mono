@@ -1,0 +1,44 @@
+$date
+	Mon Nov 03 19:50:15 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module muxaluA_tb $end
+$var wire 32 ! aluA [31:0] $end
+$var reg 1 " aluASrc $end
+$var reg 32 # pc [31:0] $end
+$var reg 32 $ ru_rs1 [31:0] $end
+$scope module dut $end
+$var wire 1 " aluASrc $end
+$var wire 32 % pc [31:0] $end
+$var wire 32 & ru_rs1 [31:0] $end
+$var reg 32 ' aluA [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b10 '
+b10 &
+b1 %
+b10 $
+b1 #
+0"
+b10 !
+$end
+#10
+b11 !
+b11 '
+1"
+b100 $
+b100 &
+b11 #
+b11 %
+#20

@@ -8,7 +8,7 @@ outputs:
 control:
 - 5 bits para seleccionar el tipo de branch (BrOp) desde la unidad de control
 
-NextPCSrc -> BrOp
+nextPCSrc -> BrOp
 0 -> 00XXX
 = -> 01000
 != -> 01001
@@ -24,14 +24,14 @@ module bru_tb;
   logic [31:0] ru_rs1;
   logic [31:0] ru_rs2;
   logic [4:0] brOp;
-  logic NextPCSrc;
+  logic nextPCSrc;
 
   // Instancia del módulo bru
   bru uut (
     .ru_rs1(ru_rs1),
     .ru_rs2(ru_rs2),
     .brOp(brOp),
-    .NextPCSrc(NextPCSrc)
+    .nextPCSrc(nextPCSrc)
   );
 
   initial begin
@@ -49,7 +49,7 @@ module bru_tb;
     ru_rs2 = 32'd20;
     brOp = 5'b01000; // BEQ
     #10;
-    $display("BEQ Test (negativo): ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 0)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("BEQ Test (negativo): ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 0)", ru_rs1, ru_rs2, nextPCSrc);
 
     // -----------------------------------------------------------
     // Prueba 1: BEQ - Igualdad
@@ -59,7 +59,7 @@ module bru_tb;
     ru_rs2 = 32'd10;
     brOp = 5'b01000; // BEQ
     #10;
-    $display("BEQ Test: ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("BEQ Test: ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, nextPCSrc);
 
     // -----------------------------------------------------------
     // Prueba 2: BNE - Desigualdad
@@ -69,7 +69,7 @@ module bru_tb;
     ru_rs2 = 32'd20;
     brOp = 5'b01001; // BNE
     #10;
-    $display("BNE Test: ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("BNE Test: ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, nextPCSrc);
 
     // -----------------------------------------------------------
     // Prueba 3: BLT - Menor que (signed)
@@ -79,7 +79,7 @@ module bru_tb;
     ru_rs2 = 32'd10;
     brOp = 5'b01100; // BLT
     #10;
-    $display("BLT Test: ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("BLT Test: ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, nextPCSrc);
 
     // -----------------------------------------------------------
     // Prueba 4: BGE - Mayor o igual que (signed)
@@ -89,7 +89,7 @@ module bru_tb;
     ru_rs2 = 32'd10;
     brOp = 5'b01101; // BGE
     #10;
-    $display("BGE Test: ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("BGE Test: ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, nextPCSrc);
 
     // -----------------------------------------------------------
     // Prueba 5: BLTU - Menor que (unsigned)
@@ -99,7 +99,7 @@ module bru_tb;
     ru_rs2 = 32'd10;
     brOp = 5'b01110; // BLTU
     #10;
-    $display("BLTU Test: ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("BLTU Test: ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, nextPCSrc);
     // -----------------------------------------------------------
     // Prueba 6: BGEU - Mayor o igual que (unsigned)
     // ru_rs1 = 20, ru_rs2 = 10, brOp = 01111 (BGEU)
@@ -108,7 +108,7 @@ module bru_tb;
     ru_rs2 = 32'd10;
     brOp = 5'b01111; // BGEU
     #10;
-    $display("BGEU Test: ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("BGEU Test: ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 1)", ru_rs1, ru_rs2, nextPCSrc);
 
     // -----------------------------------------------------------
     // Prueba 7: desde el Program counter (sin branch)
@@ -118,7 +118,7 @@ module bru_tb;
     ru_rs2 = 32'd0;
     brOp = 5'b00000; // No branch
     #10;
-    $display("No Branch Test: ru_rs1 = %d, ru_rs2 = %d, NextPCSrc = %b (debe ser 0)", ru_rs1, ru_rs2, NextPCSrc);
+    $display("No Branch Test: ru_rs1 = %d, ru_rs2 = %d, nextPCSrc = %b (debe ser 0)", ru_rs1, ru_rs2, nextPCSrc);
 
     $display("\n=================================================================");
     $display("                     FIN DE SIMULACIÓN");

@@ -76,17 +76,29 @@ always_comb begin
       ImmSrc = 3'b000; // No se usa inmediato en R-Type
       AluAsrc = 1'b0;// La fuente A es el registro rs1
       AluBsrc = 1'b0;// La fuente B es el registro rs2
-      case ({funct3, funct7})
-        10'b0000000000: AluOp = 4'b0000; // ADD
-        10'b0000100000: AluOp = 4'b1000; // SUB
-        10'b0010000000: AluOp = 4'b0001; // SLL
-        10'b0100000000: AluOp = 4'b0010; // SLT
-        10'b0110000000: AluOp = 4'b0011; // SLTU
-        10'b1000000000: AluOp = 4'b0100; // XOR
-        10'b1010000000: AluOp = 4'b0101; // SRL
-        10'b1010100000: AluOp = 4'b1101; // SRA
-        10'b1100000000: AluOp = 4'b0110; // OR
-        10'b1110000000: AluOp = 4'b0111; // AND
+      case (funct3)
+        3'b000: begin
+          if (funct7 == 7'b0000000)
+            AluOp = 4'b0000; // ADD
+          else if (funct7 == 7'b0100000)
+            AluOp = 4'b1000; // SUB
+          else
+            AluOp = 4'b0000;
+        end
+        3'b001: AluOp = 4'b0001; // SLL
+        3'b010: AluOp = 4'b0010; // SLT
+        3'b011: AluOp = 4'b0011; // SLTU
+        3'b100: AluOp = 4'b0100; // XOR
+        3'b101: begin
+          if (funct7 == 7'b0000000)
+            AluOp = 4'b0101; // SRL
+          else if (funct7 == 7'b0100000)
+            AluOp = 4'b1101; // SRA
+          else
+            AluOp = 4'b0101;
+        end
+        3'b110: AluOp = 4'b0110; // OR
+        3'b111: AluOp = 4'b0111; // AND
         default: AluOp = 4'b0000; // Operación por defecto
       endcase
     end

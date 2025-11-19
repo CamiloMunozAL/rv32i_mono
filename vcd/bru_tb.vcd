@@ -1,5 +1,5 @@
 $date
-	Mon Nov 03 20:33:45 2025
+	Tue Nov 04 06:59:15 2025
 $end
 $version
 	Icarus Verilog
@@ -8,7 +8,7 @@ $timescale
 	1s
 $end
 $scope module bru_tb $end
-$var wire 1 ! NextPCSrc $end
+$var wire 1 ! nextPCSrc $end
 $var reg 5 " brOp [4:0] $end
 $var reg 32 # ru_rs1 [31:0] $end
 $var reg 32 $ ru_rs2 [31:0] $end
@@ -16,7 +16,7 @@ $scope module uut $end
 $var wire 5 % brOp [4:0] $end
 $var wire 32 & ru_rs1 [31:0] $end
 $var wire 32 ' ru_rs2 [31:0] $end
-$var reg 1 ! NextPCSrc $end
+$var reg 1 ! nextPCSrc $end
 $upscope $end
 $upscope $end
 $enddefinitions $end

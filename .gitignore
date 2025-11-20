@@ -102,16 +102,3 @@ $RECYCLE.BIN/
 *.bak
 *.old
 recu/                   # Carpeta de recuperación/backup manual
-
-# ==============================================================================
-# Archivos a MANTENER (no ignorar)
-# ==============================================================================
-# Los siguientes NO deben estar en .gitignore:
-# - src/*.sv              (código fuente)
-# - tb/*.sv               (testbenches)
-# - quartus/*.qsf         (settings del proyecto)
-# - quartus/*.qpf         (archivo de proyecto)
-# - quartus/*.sdc         (restricciones de timing)
-# - quartus/*.tcl         (scripts de configuración)
-# - docs/*.md             (documentación)
-# - readme.md             (README principal)

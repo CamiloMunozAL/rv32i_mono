@@ -300,3 +300,21 @@ En cada prueba se utiliza `$display` para mostrar el resultado y se genera un ar
 ![Resultado muxrudata Testbench](../img/muxrudata_tb.png)
 
 ---
+
+### 1️⃣2️⃣ Instruction Memory (Memoria de Instrucciones)
+
+Se implementó la memoria de instrucciones (`im`) que almacena el programa a ejecutar. Es un arreglo de 256 palabras de 32 bits (1 KiB) con acceso combinacional. La dirección del PC se divide entre 4 usando `addr[31:2]` para obtener el índice de palabra.
+
+Se cargó un programa educativo de 43 instrucciones que demuestra: bucle de suma (1+2+3+4+5=15), operaciones aritméticas, lógicas, desplazamientos, LOAD/STORE en mem[2] y mem[3], saltos condicionales (BEQ) e incondicionales (JAL sobre 0xDEADBEEF).
+
+#### 🧪 Testbench
+
+El testbench (`im_tb.sv`) verifica la lectura correcta de instrucciones clave y el manejo de direcciones no alineadas. Las 10 pruebas fueron exitosas.
+
+**Resultado del testbench:**
+
+![Resultado IM Testbench](../img/im_tb.png)
+
+---
+
+---

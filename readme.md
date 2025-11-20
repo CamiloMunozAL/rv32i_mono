@@ -122,13 +122,6 @@ LEDR9 = JALR
 
 ## 🏗️ Arquitectura
 
-### Componentes Principales
-
-```
-PC → IM → CU → RU → ALU → DM → Mux RU Data
-      ↓    ↓    ↓     ↓     ↓
-   ImmGen BRU MuxA MuxB MuxPC
-```
 
 **13 módulos principales:**
 

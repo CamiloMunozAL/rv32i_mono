@@ -173,10 +173,10 @@ always_comb begin
     // Branch Instructions (B-Type)
     7'b1100011: begin
       RUWr = 1'b0; // No se escribe en el registro
-      ImmSrc = 3'b010; // B-Type immediate
-      AluAsrc = 1'b0; // La fuente A es el registro rs1
-      AluBsrc = 1'b0; // La fuente B es el registro rs2
-      AluOp = 4'b1000; // SUB para comparar
+      ImmSrc = 3'b101; // B-Type immediate (CORREGIDO: era 010, debe ser 101)
+      AluAsrc = 1'b1; // La fuente A es PC (para calcular PC + offset)
+      AluBsrc = 1'b1; // La fuente B es el inmediato (offset)
+      AluOp = 4'b0000; // ADD para calcular dirección de salto (PC + offset)
       case (funct3)
         3'b000: BrOp = 5'b01000; // BEQ
         3'b001: BrOp = 5'b01001; // BNE
@@ -191,7 +191,7 @@ always_comb begin
     // JAL Instruction (J-Type)
     7'b1101111: begin
       RUWr = 1'b1; // Se escribe en el registro
-      ImmSrc = 3'b100; // J-Type immediate
+      ImmSrc = 3'b011; // J-Type immediate (CORREGIDO: era 100, debe ser 011)
       AluAsrc = 1'b1; // Fuente A es PC
       AluBsrc = 1'b1; // Fuente B es inmediato
       AluOp = 4'b0000; // ADD para calcular la dirección de salto

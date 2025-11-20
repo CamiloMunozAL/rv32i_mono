@@ -28,7 +28,8 @@ module bru (
 
   always_comb begin
     case (brOp)
-      5'b00000, 5'b10000: nextPCSrc = 1'b0; // No branch
+      5'b00000: nextPCSrc = 1'b0; // No branch
+      5'b10000: nextPCSrc = 1'b1; // JAL/JALR - Salto incondicional
       5'b01000: nextPCSrc = (ru_rs1 == ru_rs2) ? 1'b1 : 1'b0; // BEQ
       5'b01001: nextPCSrc = (ru_rs1 != ru_rs2) ? 1'b1 : 1'b0; // BNE
       5'b01100: nextPCSrc = ($signed(ru_rs1) < $signed(ru_rs2)) ? 1'b1 : 1'b0; // BLT

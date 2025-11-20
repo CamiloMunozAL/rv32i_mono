@@ -318,3 +318,75 @@ El testbench (`im_tb.sv`) verifica la lectura correcta de instrucciones clave y 
 ---
 
 ---
+### 1️⃣3️⃣ Integración del Procesador Monociclo
+
+Con todos los módulos individuales verificados, se procedió a la **integración del procesador completo** en el módulo `monociclo.sv`. Este módulo conecta todos los componentes desarrollados anteriormente:
+
+- **Program Counter (PC):** Almacena la dirección de la instrucción actual.
+- **Instruction Memory (IM):** Provee la instrucción a ejecutar.
+- **Control Unit (CU):** Decodifica la instrucción y genera las señales de control.
+- **Register Unit (RU):** Almacena los operandos y resultados.
+- **Immediate Generator (immgen):** Extrae y extiende los inmediatos.
+- **Multiplexores (muxaluA, muxaluB):** Seleccionan las entradas de la ALU.
+- **ALU:** Realiza las operaciones aritméticas y lógicas.
+- **Branch Unit (BRU):** Evalúa las condiciones de salto.
+- **Data Memory (DM):** Almacena y lee datos de memoria.
+- **Multiplexor (muxrudata):** Selecciona el dato a escribir en registros.
+- **Sumador (sum):** Calcula PC+4.
+- **Multiplexor (muxnextpc):** Selecciona la siguiente dirección del PC.
+
+**Arquitectura del procesador monociclo:**
+
+El flujo de ejecución de una instrucción sigue estos pasos:
+
+1. El PC provee la dirección de la instrucción a la memoria de instrucciones (IM).
+2. La IM entrega la instrucción de 32 bits.
+3. La Unidad de Control (CU) decodifica el opcode, funct3 y funct7, generando todas las señales de control.
+4. El banco de registros (RU) lee los valores de rs1 y rs2.
+5. El generador de inmediatos (immgen) extrae el inmediato según el formato.
+6. Los multiplexores (muxaluA, muxaluB) seleccionan las entradas de la ALU según las señales de control.
+7. La ALU realiza la operación especificada.
+8. La Branch Unit (BRU) evalúa la condición de salto.
+9. La memoria de datos (DM) lee o escribe según la instrucción.
+10. El multiplexor (muxrudata) selecciona el dato a escribir en el registro destino.
+11. El banco de registros (RU) escribe el resultado en rd (si corresponde).
+12. El multiplexor (muxnextpc) selecciona la siguiente dirección del PC (PC+4 o dirección de salto).
+13. El PC se actualiza con la nueva dirección en el siguiente ciclo de reloj.
+
+**Señales expuestas para depuración:**
+
+Para facilitar la depuración en la FPGA, se exponen varias señales internas como salidas del módulo:
+
+- `pc_out`: Dirección actual del PC
+- `inst_out`: Instrucción actual
+- `alu_res_out`: Resultado de la ALU
+- `ru_rs1_out`, `ru_rs2_out`: Valores de los registros fuente
+- `DataRd_out`: Dato leído de memoria
+- `DataWr_out`: Dato a escribir en registros
+- `RUWr_out`, `DMWr_out`: Señales de escritura
+- Y muchas otras señales de control y datos
+
+Estas señales se conectan posteriormente al módulo `fpga_top` para visualizarlas en los displays hexadecimales y LEDs de la tarjeta DE1-SoC.
+
+#### 🧪 Testbench del procesador completo
+
+El testbench `monociclo_tb.sv` instancia el procesador completo, genera el reloj y el reset, y ejecuta el programa almacenado en la memoria de instrucciones. Se monitorean los valores de los registros clave y la memoria de datos para verificar que el programa se ejecuta correctamente:
+
+- **x3** debe contener el valor 15 al finalizar el bucle de suma.
+- **mem[0]** debe almacenar el valor 15.
+- **mem[2]** y **mem[3]** deben contener 0x2A y 0x55 respectivamente (valores de prueba de LOAD/STORE).
+
+La simulación se ejecuta durante 100 ciclos de reloj, suficientes para completar todo el programa. Se genera un archivo VCD con todas las señales para análisis detallado en WaveTrace.
+
+**Validación:**
+
+La simulación confirmó que:
+
+- ✅ El bucle se ejecuta correctamente 5 veces (x1 = 1, 2, 3, 4, 5).
+- ✅ La suma se calcula correctamente: x3 = 15.
+- ✅ El valor se almacena correctamente en memoria: mem[0] = 15.
+- ✅ Las instrucciones LOAD y STORE funcionan correctamente.
+- ✅ El salto JAL funciona correctamente (salta sobre 0xDEADBEEF).
+- ✅ Todas las operaciones aritméticas, lógicas y de desplazamiento funcionan.
+
+---

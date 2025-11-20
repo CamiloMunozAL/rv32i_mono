@@ -390,3 +390,95 @@ La simulación confirmó que:
 - ✅ Todas las operaciones aritméticas, lógicas y de desplazamiento funcionan.
 
 ---
+
+### 1️⃣4️⃣ Adaptación para FPGA (fpga_top)
+
+Para implementar el procesador en la FPGA DE1-SoC, se desarrolló el módulo `fpga_top.sv`, que actúa como la **interfaz entre el procesador monociclo y los periféricos de la tarjeta**: displays hexadecimales, LEDs, switches y botones.
+
+Este módulo es fundamental porque la FPGA tiene un reloj de 50 MHz, demasiado rápido para visualizar la ejecución de instrucciones. Además, se requiere poder controlar manualmente la ejecución (paso a paso) y visualizar el estado interno del procesador.
+
+**Componentes principales del módulo fpga_top:**
+
+1. **Clock Divider (divisor de reloj):**
+
+   - Reduce el reloj de 50 MHz a un pulso cada 1 segundo (modo automático).
+   - Permite visualizar la ejecución de instrucciones en tiempo real.
+   - Configurable mediante un contador que llega a 50,000,000 ciclos.
+
+2. **Debouncer (anti-rebote):**
+
+   - Elimina los rebotes mecánicos de los botones KEY[0] y KEY[1].
+   - Esencial para evitar múltiples pulsaciones cuando se presiona un botón físico.
+   - Implementa un contador que espera 20 ms (1,000,000 ciclos @ 50 MHz) antes de confirmar el cambio de estado.
+
+3. **Edge Detector (detector de flancos):**
+
+   - Convierte las señales de los botones en pulsos de un solo ciclo.
+   - Detecta el flanco de bajada (presión del botón) y genera un pulso de 1 ciclo de reloj.
+   - Permite ejecutar una sola instrucción por cada presión del botón.
+
+4. **Multiplexor de reloj:**
+
+   - Selecciona entre modo manual (botón KEY[1]) y modo automático (reloj de 1 segundo).
+   - Controlado por el switch SW[9].
+   - Extiende el pulso manual a 50 ciclos para garantizar la escritura en registros y memoria.
+
+5. **Display System (sistema de visualización):**
+
+   - **HEX5-HEX4:** Ventana deslizante que muestra los bits [31:16] de la señal seleccionada.
+   - **HEX3-HEX0:** Siempre muestran los bits [15:0] de la señal seleccionada.
+   - La señal se selecciona mediante los switches SW[3:0], permitiendo visualizar hasta 16 señales diferentes:
+     - PC (dirección actual)
+     - Instrucción actual
+     - Resultado de la ALU
+     - Valores de registros rs1, rs2, rd
+     - Inmediato generado
+     - Datos de memoria
+     - PC+4
+     - Y otras señales de control
+   - El switch SW[8] controla la ventana deslizante: cuando está activo, los displays HEX5-HEX4 muestran los bits superiores [31:16] de la señal.
+
+6. **LEDs indicadores:**
+
+   - **LEDR[6:0]:** Indican el tipo de instrucción que se está ejecutando (R, I, LOAD, STORE, BRANCH, JAL, JALR).
+   - **LEDR[7]:** Indica si se está escribiendo en registros (RUWr).
+   - **LEDR[8]:** Indica si se está escribiendo en memoria de datos (DMWr).
+   - **LEDR[9]:** Indica el modo de operación (manual/automático).
+
+7. **Reset automático:**
+   - El botón KEY[0] controla el reset del procesador.
+   - Permite reiniciar la ejecución del programa en cualquier momento.
+
+**Funcionamiento:**
+
+- Al encender la FPGA o presionar KEY[0], el procesador se reinicia y el PC vuelve a 0.
+- Con SW[9] en OFF (manual), se ejecuta una instrucción cada vez que se presiona KEY[1].
+- Con SW[9] en ON (automático), se ejecuta una instrucción por segundo.
+- Los displays muestran la señal seleccionada por SW[3:0], permitiendo observar el estado interno del procesador.
+- Los LEDs indican qué tipo de instrucción se está ejecutando y el estado de las señales de escritura.
+
+#### 🧪 Validación en hardware
+
+El procesador fue compilado en Quartus Prime 24.1 Lite con los siguientes resultados:
+
+- **Logic cells:** 31,234 / 65,536 (50% de utilización)
+- **Tiempo de compilación:** 19 minutos (Analysis & Synthesis: 1 min, Fitter: 17 min, Assembler: 16 s, Timing Analyzer: 19 s)
+- **Timing:** Todas las restricciones cumplidas (worst-case slack: +0.251 ns @ 85°C)
+- **Errores:** 0
+- **Advertencias:** 18 (mayormente relacionadas con puertos no utilizados y optimizaciones)
+
+El procesador fue programado en la FPGA DE1-SoC y se verificó el correcto funcionamiento:
+
+- ✅ El bucle se ejecuta correctamente y almacena 15 en mem[0].
+- ✅ Todas las operaciones aritméticas, lógicas y de desplazamiento funcionan.
+- ✅ Los accesos a memoria (LOAD/STORE) funcionan correctamente.
+- ✅ Los saltos condicionales e incondicionales funcionan.
+- ✅ Los displays muestran correctamente todas las señales seleccionadas.
+- ✅ Los LEDs indican correctamente el tipo de instrucción.
+- ✅ El modo manual y automático funcionan correctamente (siempre que no se alterne rápidamente SW[9]).
+
+**Resultado en hardware:**
+
+Se reviso funcionamiento en la fpga en vivo exitosamente
+
+---

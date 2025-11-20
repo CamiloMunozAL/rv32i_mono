@@ -1,7 +1,117 @@
-# Simulation files
-*.vvp
+# ==============================================================================
+# GITIGNORE - Procesador RISC-V RV32I Monociclo
+# ==============================================================================
 
-sim/
+# ==============================================================================
+# Archivos de Simulación (Icarus Verilog)
+# ==============================================================================
+*.vvp                   # Binarios compilados de iverilog
+*.vcd                   # Archivos de forma de onda
+sim/*.vvp               # Simulaciones compiladas
+vcd/*.vcd               # Formas de onda generadas
 
-# Temporary files
+# ==============================================================================
+# Archivos de Quartus Prime (FPGA)
+# ==============================================================================
+
+# Carpetas de compilación
+quartus/db/             # Base de datos de compilación
+quartus/incremental_db/ # Compilación incremental
+quartus/output_files/   # Archivos de salida (.sof, .pof, reportes)
+quartus/.qsys_edit/     # Editor Qsys
+quartus/simulation/     # Simulaciones generadas por Quartus
+
+# Archivos temporales de Quartus
+*.qws                   # Workspace settings
+*.bak                   # Backups
+*.rpt                   # Reportes
+*.summary               # Resúmenes
+*.smsg                  # Mensajes suprimidos
+*.done                  # Flags de completado
+*.chg                   # Archivos de cambios
+*.qdb                   # Database files
+*.qtl                   # Template files
+*.qarlog                # Archive log
+*.jdi                   # JTAG debug info
+
+# Archivos de pin planning
+*.csv                   # Pin assignments exports
+*.pin                   # Pin files
+*.pploc                 # Pin planner locations
+
+# ==============================================================================
+# Archivos de Sistema Operativo
+# ==============================================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ==============================================================================
+# IDEs y Editores
+# ==============================================================================
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains (IntelliJ, PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ==============================================================================
+# Archivos Temporales del Proyecto
+# ==============================================================================
 *.tmp
+*.temp
+*.log
+*.bak
+*.old
+recu/                   # Carpeta de recuperación/backup manual
+
+# ==============================================================================
+# Archivos a MANTENER (no ignorar)
+# ==============================================================================
+# Los siguientes NO deben estar en .gitignore:
+# - src/*.sv              (código fuente)
+# - tb/*.sv               (testbenches)
+# - quartus/*.qsf         (settings del proyecto)
+# - quartus/*.qpf         (archivo de proyecto)
+# - quartus/*.sdc         (restricciones de timing)
+# - quartus/*.tcl         (scripts de configuración)
+# - docs/*.md             (documentación)
+# - readme.md             (README principal)

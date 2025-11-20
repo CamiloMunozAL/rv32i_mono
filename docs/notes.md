@@ -203,18 +203,21 @@ Para cada caso, se asignan valores representativos a los registros y la señal d
 ### 9️⃣ Multiplexor para la Siguiente Instrucción (muxnextpc)
 
 El módulo `muxnextpc` es el encargado de seleccionar la dirección de la siguiente instrucción que debe cargar el Program Counter (PC). Recibe dos posibles direcciones:
+
 - El valor de `PC + 4`, que corresponde a la ejecución secuencial normal.
 - El resultado de la ALU, que puede ser una dirección de salto calculada (por ejemplo, en instrucciones de branch o jump).
 
 La selección entre estas dos opciones se realiza mediante la señal de control `NextPCSrc`, generada por la Branch Unit (`bru`). Si `NextPCSrc` es 0, el PC avanza de forma secuencial; si es 1, se toma la dirección calculada por la ALU.
 
 **Funcionamiento:**
+
 - Implementado como un multiplexor 2 a 1, usando un bloque `always_comb` y la señal de selección.
 - Permite que el procesador ejecute saltos y cambios de flujo de manera eficiente y controlada.
 
 #### 🧪 Testbench
 
 El testbench (`muxnextpc_tb.sv`) verifica ambos casos de selección:
+
 - Cuando `NextPCSrc` es 0, la salida corresponde a `PC + 4`.
 - Cuando `NextPCSrc` es 1, la salida corresponde al resultado de la ALU.
 
@@ -223,5 +226,42 @@ En cada prueba se asignan valores distintos a las entradas y se comprueba que la
 **Resultado del testbench:**
 
 ![Resultado muxnextpc Testbench](../img/muxnextpc_tb.png)
+
+---
+
+### 🔟 Data Memory (Memoria de Datos)
+
+El módulo `dm` implementa la memoria de datos del procesador monociclo RISC-V32I, permitiendo operaciones de lectura y escritura en diferentes tamaños: byte, halfword y word, tanto en versiones signadas como no signadas. La memoria se organiza como un arreglo de 1 KiB (1024 bytes), accesible mediante una dirección de 32 bits.
+
+**Funcionamiento:**
+
+- La lectura es combinacional, permitiendo obtener el dato solicitado en cualquier momento según el tipo de acceso (`DMCtrl`).
+- La escritura es sincronizada, ocurriendo únicamente en el flanco de subida del reloj (`clk`) cuando la señal de escritura (`DMWr`) está activa. Esto asegura la integridad de los datos y evita condiciones de carrera.
+- Se soportan los modos LB, LH, LW, LBU, LHU y sus equivalentes de escritura (SB, SH, SW).
+
+#### 🧪 Testbench
+
+El testbench (`dm_tb.sv`) verifica el funcionamiento de la memoria de datos con pruebas para cada tipo de acceso:
+
+- Escritura y lectura de palabra completa (SW/LW)
+- Escritura y lectura de byte (SB/LB/LBU)
+- Escritura y lectura de halfword (SH/LHU)
+
+Se asignan valores representativos y se comprueba que la salida corresponde al valor esperado. Se utiliza `$display` para mostrar los resultados y se genera un archivo VCD para análisis de ondas.
+
+#### ⚠️ Dificultades y consideraciones
+
+Durante la implementación se presentaron dos dificultades principales:
+
+- **Sincronización con el reloj:** Es fundamental que la escritura ocurra en el flanco de subida del reloj. Si se intenta leer inmediatamente después de escribir, sin esperar el siguiente ciclo, pueden aparecer valores indeterminados (`x`). La solución fue agregar retardos adecuados en el testbench para garantizar que la lectura ocurra después de la escritura efectiva.
+- **Inicialización de la memoria:** Para evitar valores indeterminados al inicio de la simulación, se inicializó toda la memoria a cero en un bloque `initial`.
+
+Estas consideraciones aseguran que el módulo sea compatible tanto con simuladores como con herramientas de síntesis como Quartus.
+
+**Resultado del testbench:**
+
+![Resultado Data Memory Testbench](../img/dm_tb.png)
+
+---
 
 ---

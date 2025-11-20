@@ -36,7 +36,16 @@ module monociclo (
     output logic [31:0] pc_out,           // PC actual
     output logic [31:0] inst_out,         // Instrucción actual
     output logic [31:0] alu_result_out,   // Resultado de ALU
-    output logic [31:0] debug_ru [0:31],  // Banco de registros completo
+    output logic [31:0] alu_a_out,        // Entrada A de ALU
+    output logic [31:0] alu_b_out,        // Entrada B de ALU
+    output logic [31:0] next_pc_out,      // Siguiente PC
+    output logic [31:0] debug_x1,         // Registros individuales
+    output logic [31:0] debug_x2,
+    output logic [31:0] debug_x3,
+    output logic [31:0] debug_x4,
+    output logic [31:0] debug_x5,
+    output logic [31:0] debug_x6,
+    output logic [31:0] debug_x7,
     output logic [31:0] debug_dm_word [0:7] // Primeros 8 words de memoria de datos
 );
 
@@ -104,6 +113,9 @@ module monociclo (
     assign pc_out = pc_current;
     assign inst_out = instruction;
     assign alu_result_out = alu_result;
+    assign alu_a_out = alu_a;
+    assign alu_b_out = alu_b;
+    assign next_pc_out = pc_next;
     
     //========================================================
     // INSTANCIACIÓN DE MÓDULOS
@@ -154,16 +166,15 @@ module monociclo (
         .DataWr(ru_write_data),
         .RUWr(RUWr),
         .RU_rs1(ru_rs1_data),
-        .RU_rs2(ru_rs2_data)
+        .RU_rs2(ru_rs2_data),
+        .debug_x1(debug_x1),
+        .debug_x2(debug_x2),
+        .debug_x3(debug_x3),
+        .debug_x4(debug_x4),
+        .debug_x5(debug_x5),
+        .debug_x6(debug_x6),
+        .debug_x7(debug_x7)
     );
-    
-    // Debug: Exportar banco de registros
-    genvar reg_idx;
-    generate
-        for (reg_idx = 0; reg_idx < 32; reg_idx = reg_idx + 1) begin : ru_debug
-            assign debug_ru[reg_idx] = u_ru.RU[reg_idx];
-        end
-    endgenerate
     
     // 6. Immediate Generator
     immgen u_immgen (

@@ -1,0 +1,341 @@
+$date
+	Wed Nov 19 17:38:56 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module hex_display_6_tb $end
+$var wire 7 ! hex5 [6:0] $end
+$var wire 7 " hex4 [6:0] $end
+$var wire 7 # hex3 [6:0] $end
+$var wire 7 $ hex2 [6:0] $end
+$var wire 7 % hex1 [6:0] $end
+$var wire 7 & hex0 [6:0] $end
+$var reg 24 ' value [23:0] $end
+$scope module dut $end
+$var wire 24 ( value [23:0] $end
+$var wire 7 ) hex5 [6:0] $end
+$var wire 7 * hex4 [6:0] $end
+$var wire 7 + hex3 [6:0] $end
+$var wire 7 , hex2 [6:0] $end
+$var wire 7 - hex1 [6:0] $end
+$var wire 7 . hex0 [6:0] $end
+$scope module decoder0 $end
+$var wire 4 / hex_value [3:0] $end
+$var reg 7 0 seg [6:0] $end
+$upscope $end
+$scope module decoder1 $end
+$var wire 4 1 hex_value [3:0] $end
+$var reg 7 2 seg [6:0] $end
+$upscope $end
+$scope module decoder2 $end
+$var wire 4 3 hex_value [3:0] $end
+$var reg 7 4 seg [6:0] $end
+$upscope $end
+$scope module decoder3 $end
+$var wire 4 5 hex_value [3:0] $end
+$var reg 7 6 seg [6:0] $end
+$upscope $end
+$scope module decoder4 $end
+$var wire 4 7 hex_value [3:0] $end
+$var reg 7 8 seg [6:0] $end
+$upscope $end
+$scope module decoder5 $end
+$var wire 4 9 hex_value [3:0] $end
+$var reg 7 : seg [6:0] $end
+$upscope $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 ; i [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b0 ;
+b1000000 :
+b0 9
+b1000000 8
+b0 7
+b1000000 6
+b0 5
+b1000000 4
+b0 3
+b1000000 2
+b0 1
+b1000000 0
+b0 /
+b1000000 .
+b1000000 -
+b1000000 ,
+b1000000 +
+b1000000 *
+b1000000 )
+b0 (
+b0 '
+b1000000 &
+b1000000 %
+b1000000 $
+b1000000 #
+b1000000 "
+b1000000 !
+$end
+#100000
+b1110 &
+b1110 .
+b1110 0
+b1110 %
+b1110 -
+b1110 2
+b1110 $
+b1110 ,
+b1110 4
+b1110 #
+b1110 +
+b1110 6
+b1110 "
+b1110 *
+b1110 8
+b1110 !
+b1110 )
+b1110 :
+b1111 /
+b1111 1
+b1111 3
+b1111 5
+b1111 7
+b1111 9
+b111111111111111111111111 '
+b111111111111111111111111 (
+#200000
+b10 &
+b10 .
+b10 0
+b10010 %
+b10010 -
+b10010 2
+b11001 $
+b11001 ,
+b11001 4
+b110000 #
+b110000 +
+b110000 6
+b100100 "
+b100100 *
+b100100 8
+b1111001 !
+b1111001 )
+b1111001 :
+b110 /
+b101 1
+b100 3
+b11 5
+b10 7
+b1 9
+b100100011010001010110 '
+b100100011010001010110 (
+#300000
+b1110 &
+b1110 .
+b1110 0
+b110 %
+b110 -
+b110 2
+b100001 $
+b100001 ,
+b100001 4
+b1000110 #
+b1000110 +
+b1000110 6
+b11 "
+b11 *
+b11 8
+b1000 !
+b1000 )
+b1000 :
+b1111 /
+b1110 1
+b1101 3
+b1100 5
+b1011 7
+b1010 9
+b101010111100110111101111 '
+b101010111100110111101111 (
+#400000
+b110 &
+b110 .
+b110 0
+b11 %
+b11 -
+b11 2
+b1000 #
+b1000 +
+b1000 6
+b110 "
+b110 *
+b110 8
+b100001 !
+b100001 )
+b100001 :
+b1110 /
+b1011 1
+b1010 5
+b1110 7
+b1101 9
+b110111101010110110111110 '
+b110111101010110110111110 (
+#500000
+b1000000 &
+b1000000 .
+b1000000 0
+b1000000 %
+b1000000 -
+b1000000 2
+b1000000 $
+b1000000 ,
+b1000000 4
+b1000000 #
+b1000000 +
+b1000000 6
+b1000000 "
+b1000000 *
+b1000000 8
+b1000000 !
+b1000000 )
+b1000000 :
+b0 /
+b0 1
+b0 3
+b0 5
+b0 7
+b0 9
+b0 '
+b0 (
+#550000
+b1111001 &
+b1111001 .
+b1111001 0
+b1 /
+b1 '
+b1 (
+b1 ;
+#600000
+b100100 &
+b100100 .
+b100100 0
+b10 /
+b10 '
+b10 (
+b10 ;
+#650000
+b110000 &
+b110000 .
+b110000 0
+b11 /
+b11 '
+b11 (
+b11 ;
+#700000
+b11001 &
+b11001 .
+b11001 0
+b100 /
+b100 '
+b100 (
+b100 ;
+#750000
+b10010 &
+b10010 .
+b10010 0
+b101 /
+b101 '
+b101 (
+b101 ;
+#800000
+b10 &
+b10 .
+b10 0
+b110 /
+b110 '
+b110 (
+b110 ;
+#850000
+b1111000 &
+b1111000 .
+b1111000 0
+b111 /
+b111 '
+b111 (
+b111 ;
+#900000
+b0 &
+b0 .
+b0 0
+b1000 /
+b1000 '
+b1000 (
+b1000 ;
+#950000
+b10000 &
+b10000 .
+b10000 0
+b1001 /
+b1001 '
+b1001 (
+b1001 ;
+#1000000
+b1000 &
+b1000 .
+b1000 0
+b1010 /
+b1010 '
+b1010 (
+b1010 ;
+#1050000
+b11 &
+b11 .
+b11 0
+b1011 /
+b1011 '
+b1011 (
+b1011 ;
+#1100000
+b1000110 &
+b1000110 .
+b1000110 0
+b1100 /
+b1100 '
+b1100 (
+b1100 ;
+#1150000
+b100001 &
+b100001 .
+b100001 0
+b1101 /
+b1101 '
+b1101 (
+b1101 ;
+#1200000
+b110 &
+b110 .
+b110 0
+b1110 /
+b1110 '
+b1110 (
+b1110 ;
+#1250000
+b1110 &
+b1110 .
+b1110 0
+b1111 /
+b1111 '
+b1111 (
+b1111 ;
+#1300000
+b10000 ;

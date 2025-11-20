@@ -1,0 +1,51 @@
+$date
+	Thu Nov 20 14:54:45 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module muxrudata_tb $end
+$var wire 32 ! DataWr [31:0] $end
+$var reg 32 " ALURes [31:0] $end
+$var reg 32 # DataRd [31:0] $end
+$var reg 32 $ PCInc [31:0] $end
+$var reg 2 % RUDataWrSrc [1:0] $end
+$scope module uut $end
+$var wire 32 & ALURes [31:0] $end
+$var wire 32 ' DataRd [31:0] $end
+$var wire 32 ( PCInc [31:0] $end
+$var wire 2 ) RUDataWrSrc [1:0] $end
+$var reg 32 * DataWr [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b11011110101011011011111011101111 *
+b0 )
+b10000 (
+b11001010111111101011101010111110 '
+b11011110101011011011111011101111 &
+b0 %
+b10000 $
+b11001010111111101011101010111110 #
+b11011110101011011011111011101111 "
+b11011110101011011011111011101111 !
+$end
+#10000
+b11001010111111101011101010111110 !
+b11001010111111101011101010111110 *
+b1 %
+b1 )
+#20000
+b10000 !
+b10000 *
+b10 %
+b10 )
+#30000

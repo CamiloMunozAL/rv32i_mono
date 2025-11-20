@@ -28,13 +28,13 @@ module dm (
     output logic [31:0] debug_dm_word [0:7] // debug: primeros 8 words
 );
 
-    // Memoria de 8 KiB (8192 bytes)
-    logic [7:0] mem [0:8191];
+    // Memoria de 1 KiB (1024 bytes) - igual que segmentado
+    (* ramstyle = "M10K" *) logic [7:0] mem [0:1023];
 
-    // Inicializar memoria a 0
+    // Inicializar memoria a 0 (compatible con síntesis FPGA)
+    integer i;
     initial begin
-        integer i;
-        for (i = 0; i < 8192; i = i + 1) begin
+        for (i = 0; i < 1024; i = i + 1) begin
             mem[i] = 8'h00;
         end
     end
@@ -48,11 +48,15 @@ module dm (
     endgenerate
 
     // Aliases para lectura (más legible y compatible con Icarus)
+    // Limitar direcciones a 10 bits (1024 bytes)
+    logic [9:0] addr_limited;
+    assign addr_limited = addr[9:0];
+    
     logic [7:0] b0, b1, b2, b3;
-    assign b0 = mem[addr];
-    assign b1 = mem[addr + 1];
-    assign b2 = mem[addr + 2];
-    assign b3 = mem[addr + 3];
+    assign b0 = mem[addr_limited];
+    assign b1 = mem[addr_limited + 1];
+    assign b2 = mem[addr_limited + 2];
+    assign b3 = mem[addr_limited + 3];
 
     //========================================================
     // LECTURA COMBINACIONAL (sin reloj)
@@ -71,16 +75,16 @@ module dm (
     always_ff @(posedge clk) begin
         if (DMWr) begin
             case (DMCtrl)
-                3'b000: mem[addr] <= DataWr[7:0];                       // SB
+                3'b000: mem[addr_limited] <= DataWr[7:0];                       // SB
                 3'b001: begin                                           // SH
-                    mem[addr]     <= DataWr[7:0];
-                    mem[addr + 1] <= DataWr[15:8];
+                    mem[addr_limited]     <= DataWr[7:0];
+                    mem[addr_limited + 1] <= DataWr[15:8];
                 end
                 3'b010: begin                                           // SW
-                    mem[addr]     <= DataWr[7:0];
-                    mem[addr + 1] <= DataWr[15:8];
-                    mem[addr + 2] <= DataWr[23:16];
-                    mem[addr + 3] <= DataWr[31:24];
+                    mem[addr_limited]     <= DataWr[7:0];
+                    mem[addr_limited + 1] <= DataWr[15:8];
+                    mem[addr_limited + 2] <= DataWr[23:16];
+                    mem[addr_limited + 3] <= DataWr[31:24];
                 end
             endcase
         end

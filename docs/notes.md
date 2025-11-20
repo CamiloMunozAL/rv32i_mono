@@ -265,3 +265,38 @@ Estas consideraciones aseguran que el módulo sea compatible tanto con simulador
 ---
 
 ---
+
+### 11 Multiplexor para la Escritura en Registros (muxrudata)
+
+El módulo `muxrudata` se encarga de seleccionar el dato que será escrito en el registro destino (`rd`) del banco de registros (RU) al finalizar la ejecución de una instrucción. Este multiplexor es fundamental para el correcto funcionamiento del procesador monociclo, ya que permite que diferentes instrucciones escriban en los registros el valor adecuado según el tipo de operación:
+
+- **ALU:** Para instrucciones aritméticas y lógicas, el resultado de la ALU se escribe en el registro destino.
+- **Memoria de datos:** Para instrucciones de carga (`lw`, `lh`, `lb`, etc.), el dato leído de la memoria de datos se escribe en el registro destino.
+- **PC+4:** Para instrucciones de salto y llamada (`jal`, `jalr`), el valor de `PC+4` se escribe en el registro destino, permitiendo el retorno correcto en subrutinas.
+
+El módulo recibe como entradas los valores de `PCInc` (PC+4), `ALURes` (resultado de la ALU), `DataRd` (dato leído de la memoria de datos) y la señal de control `RUDataWrSrc` (2 bits), que indica qué fuente seleccionar. La salida es el dato final `DataWr` que se conecta al banco de registros.
+
+**Funcionamiento:**
+
+- Si `RUDataWrSrc` es `00`, se selecciona el resultado de la ALU.
+- Si es `01`, se selecciona el dato leído de la memoria de datos.
+- Si es `10`, se selecciona el valor de `PC+4`.
+- En cualquier otro caso, la salida es cero por seguridad.
+
+El diseño utiliza un bloque `always_comb` y un `case` para seleccionar la fuente adecuada de datos.
+
+#### 🧪 Testbench
+
+Se desarrolló un testbench (`muxrudata_tb.sv`) que verifica el funcionamiento del multiplexor en los tres casos principales:
+
+- **Caso 1:** Selección de la ALU (`RUDataWrSrc=00`). Se asigna un valor representativo y se comprueba que la salida corresponde al valor esperado.
+- **Caso 2:** Selección de la memoria de datos (`RUDataWrSrc=01`). Se asigna un valor representativo y se comprueba la salida.
+- **Caso 3:** Selección de `PC+4` (`RUDataWrSrc=10`). Se asigna un valor y se verifica la salida.
+
+En cada prueba se utiliza `$display` para mostrar el resultado y se genera un archivo VCD para análisis de ondas. El testbench cubre todos los casos de selección y valida que el multiplexor responde correctamente a la señal de control.
+
+**Resultado del testbench:**
+
+![Resultado muxrudata Testbench](../img/muxrudata_tb.png)
+
+---
